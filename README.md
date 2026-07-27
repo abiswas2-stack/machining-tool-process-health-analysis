@@ -259,21 +259,30 @@ The test then confirms that the calculated standard deviation is greater for the
 
 Synthetic files reproduce the HDF5 reference structure expected by the loader while remaining small enough to store and run during automated testing.
 
+## Fault classification (Random Forest)
+
+In addition to single-feature comparisons, `src/fault_classifier.py` trains a Random Forest classifier using all eight computed features together, to distinguish between multiple machining conditions at once.
+
+Run it directly with:
+
+    python src/fault_classifier.py
+
+On the four Machining conditions (Baseline, Misalignment, SurfaceCracks, ToolWear), this achieved approximately 91% overall accuracy. Baseline and ToolWear were classified almost perfectly, while Misalignment and SurfaceCracks were more frequently confused with each other, consistent with both being process/geometry-related faults rather than tool-condition faults.
+
+The train/test split is stratified by condition but does not hold out entire files. Since segments from the same file originate from the same recording session, some session-specific effects could optimistically inflate accuracy slightly; a stricter evaluation would hold out whole files rather than individual segments.
+
 ## Limitations
 
-The software currently performs descriptive and exploratory comparison rather than supervised machine-learning classification.
+The exploratory statistical comparisons (single-feature, segment-by-segment) assume that corresponding segments across two files represent comparable operations, and require the selected number of segments to exist in both files.
 
-Important limitations include:
+The Random Forest classifier improves on single-feature comparison by combining multiple features, but has its own limitations:
 
-* segments are compared by matching index
-* the program assumes that corresponding segments represent comparable operations
-* the selected number of segments must exist in both files
-* only time-domain statistical features are currently implemented
-* no threshold has been validated for production fault detection
-* no confusion matrix, sensitivity or specificity is calculated
-* repeated opening of files prioritises simplicity over maximum computational performance
+- the train/test split is stratified by condition but does not hold out entire files; since segments from the same file share a recording session, this may optimistically inflate accuracy slightly compared to evaluating on a fully unseen file
+- the classifier was trained only on the four Machining conditions (Baseline, Misalignment, SurfaceCracks, ToolWear) and has not been evaluated on the Linear or Spindle fingerprint-routine conditions
+- no threshold or confidence calibration has been validated for production deployment
+- only time-domain statistical features are currently used; frequency-domain features (e.g. FFT-based) are not yet included and may further improve separation between Misalignment and SurfaceCracks, which the current model still confuses with each other
 
-Future development could include frequency-domain features, plotting, batch comparison of several sensor fields, supervised classification and validation using held-out experimental data.
+Future development could include frequency-domain features, evaluation with file-level (rather than segment-level) train/test splits, and validation on additional held-out experimental sessions.
 
 ## Licence
 
