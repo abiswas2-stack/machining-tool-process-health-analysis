@@ -1,4 +1,4 @@
-# Machining Tool Life Analysis
+# Machining Tool and Process Health Analysis
 
 A Python command-line tool for exploratory comparison of segmented machine-tool sensor signals recorded under baseline and simulated fault conditions.
 
@@ -112,8 +112,8 @@ Signals containing no valid numeric samples are always rejected.
 Clone the repository:
 
 ```bash
-git clone https://github.com/abiswas2-stack/machining-tool-health-analysis.git
-cd machining-tool-health-analysis
+git clone https://github.com/abiswas2-stack/machining-tool-process-health-analysis.git
+cd machining-tool-process-health-analysis
 ```
 
 Create a virtual environment:
@@ -212,7 +212,7 @@ Tests are also executed automatically through GitHub Actions after pushes and pu
 ## Project structure
 
 ```text
-machining-tool-health-analysis/
+machining-tool-process-health-analysis/
 ├── .github/
 │   └── workflows/
 │       └── tests.yml
