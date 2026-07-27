@@ -1,4 +1,6 @@
 h5py
 numpy
 pytest
+matplotlib
+pandas
 scikit-learn
