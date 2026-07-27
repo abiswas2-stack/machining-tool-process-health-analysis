@@ -271,18 +271,24 @@ On the four Machining conditions (Baseline, Misalignment, SurfaceCracks, ToolWea
 
 The train/test split is stratified by condition but does not hold out entire files. Since segments from the same file originate from the same recording session, some session-specific effects could optimistically inflate accuracy slightly; a stricter evaluation would hold out whole files rather than individual segments.
 
+When evaluated using a chronological split (training on each condition's earliest segments and testing on its latest segments, rather than a random shuffle), overall accuracy remained high at 93%. Misalignment and Tool Wear retained 100% recall under this stricter test, suggesting their feature signatures are stable throughout a session. However, Baseline recall dropped to 65%, with a number of late-session Baseline segments misclassified as Surface Cracks. This indicates the two conditions may become harder to distinguish later in a session, possibly due to gradual drift (e.g. thermal effects) rather than a stable fault signature, and highlights a limitation of drawing conclusions from a single recording session per condition.
+
+## Limitations
+
 ## Limitations
 
 The exploratory statistical comparisons (single-feature, segment-by-segment) assume that corresponding segments across two files represent comparable operations, and require the selected number of segments to exist in both files.
 
-The Random Forest classifier improves on single-feature comparison by combining multiple features, but has its own limitations:
+The Random Forest classifier improves on single-feature comparison by combining multiple features across multiple sensors (SpindleX, PlateLFAccZ, Power), but has its own limitations:
 
-- the train/test split is stratified by condition but does not hold out entire files; since segments from the same file share a recording session, this may optimistically inflate accuracy slightly compared to evaluating on a fully unseen file
+- with a random train/test split, the classifier achieved 100% accuracy across all four conditions; however, since each condition originates from a single recording session, this is partly attributable to session-specific characteristics (e.g. sensor calibration or ambient conditions on the day of recording) rather than fault signatures alone
+- a chronological split (training on each condition's earliest segments, testing on its latest) was used to test this more directly. Accuracy remained high at 93%, and Misalignment and Tool Wear retained 100% recall, suggesting these two conditions have stable, genuine feature signatures. However, Baseline recall dropped to 65%, with several late-session Baseline segments misclassified as Surface Cracks, indicating the two may become harder to distinguish later in a session, possibly due to gradual drift (e.g. thermal effects) rather than a stable fault signature
+- because each condition is drawn from only one recording session, it is not possible to fully separate genuine fault signatures from session-specific artifacts using this dataset alone; a stronger test would require multiple independent recording sessions per condition
 - the classifier was trained only on the four Machining conditions (Baseline, Misalignment, SurfaceCracks, ToolWear) and has not been evaluated on the Linear or Spindle fingerprint-routine conditions
 - no threshold or confidence calibration has been validated for production deployment
-- only time-domain statistical features are currently used; frequency-domain features (e.g. FFT-based) are not yet included and may further improve separation between Misalignment and SurfaceCracks, which the current model still confuses with each other
+- only time-domain statistical features are currently used; frequency-domain features (e.g. FFT-based) are not yet included
 
-Future development could include frequency-domain features, evaluation with file-level (rather than segment-level) train/test splits, and validation on additional held-out experimental sessions.
+Future development could include frequency-domain features, evaluation using multiple independent recording sessions per condition to properly separate genuine fault signatures from session artifacts, and validation on additional held-out experimental data.
 
 ## Licence
 
