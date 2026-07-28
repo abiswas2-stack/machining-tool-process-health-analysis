@@ -275,7 +275,7 @@ The train/test split is stratified by condition but does not hold out entire fil
 
 When evaluated using a chronological split (training on each condition's earliest segments and testing on its latest segments, rather than a random shuffle), overall accuracy remained high at 93%. Misalignment and Tool Wear retained 100% recall under this stricter test, suggesting their feature signatures are stable throughout a session. However, Baseline recall dropped to 65%, with a number of late-session Baseline segments misclassified as Surface Cracks. This indicates the two conditions may become harder to distinguish later in a session, possibly due to gradual drift (e.g. thermal effects) rather than a stable fault signature, and highlights a limitation of drawing conclusions from a single recording session per condition.
 
-## Limitations
+
 
 ## Limitations
 
