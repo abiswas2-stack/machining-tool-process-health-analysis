@@ -221,9 +221,11 @@ machining-tool-process-health-analysis/
 ├── src/
 │   ├── machining_file.py
 │   ├── main.py
+│   ├── fault_classifier.py
 │   └── explore_data.py
 ├── tests/
 │   ├── test_machining_file.py
+│   ├── test_fault_classifier.py
 │   └── test_cli.py
 ├── .gitignore
 ├── LICENSE
